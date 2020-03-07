@@ -75,6 +75,9 @@ public class FileController {
                         @RequestParam(value = "id", required = false, defaultValue = "0") String id,
                         HttpServletRequest request,
                         HttpServletResponse response) {
+        
+        log.info("C====" + printmemory());
+
         resService.transfer(sourceFormat,
                 sourceKey,
                 sourceIV,
@@ -226,6 +229,27 @@ public class FileController {
     @Autowired
     public void setArchiveService(ArchiveService archiveService) {
         this.archiveService = archiveService;
+    }
+    
+    public String printmemory() {
+        long heapSize = Runtime.getRuntime().totalMemory();
+
+        // Get maximum size of heap in bytes. The heap cannot grow beyond this size.
+        // Any attempt will result in an OutOfMemoryException.
+        long heapMaxSize = Runtime.getRuntime().maxMemory();
+
+        // Get amount of free memory within the heap in bytes. This size will increase
+        // after garbage collection and decrease as new objects are created.
+        long heapFreeSize = Runtime.getRuntime().freeMemory();
+
+       return "heapsize " + formatSize(heapSize) + ", heapFreesize " + formatSize(heapFreeSize)+", heapMaxsize " + formatSize(heapMaxSize);
+    }
+    
+    public static String formatSize(long v) {
+        if (v < 1024)
+            return v + " B";
+        int z = (63 - Long.numberOfLeadingZeros(v)) / 10;
+        return String.format("%.1f %sB", (double) v / (1L << (z * 10)), " KMGTPE".charAt(z));
     }
 
 }

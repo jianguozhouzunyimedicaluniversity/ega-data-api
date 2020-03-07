@@ -316,6 +316,7 @@ public class My2KCachePageFactory implements FactoryBean<Cache<String, CachePage
             url = fireCommons.getFireObjectUrl(path);
             request = new HttpGet(url);
             fireCommons.addAuthenticationForFireRequest(httpAuth, url, request);
+            request.addHeader("Range", "bytes=0-16");
         }
 
         byte[] IV = new byte[16];
